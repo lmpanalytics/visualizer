@@ -46,7 +46,7 @@
             <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
             <scope>test</scope>
-        </dependency>      
+        </dependency>
     </dependencies>
     <build>
         <plugins>
