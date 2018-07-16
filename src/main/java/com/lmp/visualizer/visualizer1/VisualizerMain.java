@@ -5,6 +5,7 @@
  */
 package com.lmp.visualizer.visualizer1;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,6 +21,13 @@ public class VisualizerMain {
         // Generate a unit list
         Model.generateLinearModel(1d, 10d);
         List<Double> unitList = Model.getListOfUnits();
+
+//        Generate plans
+        Plan productionPlan = new Plan();
+        productionPlan.assignDates(unitList, LocalDate.of(2016, 02, 27));
+
+        Plan salesPlan = new Plan();
+        salesPlan.assignDates(unitList, LocalDate.of(2016, 03, 27));
     }
 
 }

@@ -7,6 +7,7 @@ package com.lmp.visualizer.visualizer1;
 
 import java.util.Arrays;
 import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,12 +57,12 @@ public class ModelTest {
         List<Double> resultList = Model.getListOfUnits();
 
 //        Test of unit list contents
-        assertEquals(expUnitList, resultList);
+        assertThat(resultList, is(expUnitList));
 
 //        Test of unit sum after first 365 days
         double result = resultList.get(364);
         double expSum = 1 * (365 - 1) + 10;
-        assertEquals(expSum, result, 0.000001);
+        assertThat(result, is(expSum));
 
     }
 
