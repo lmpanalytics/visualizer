@@ -40,10 +40,10 @@ public class PlanTest {
         System.out.println("Testing assignDates");
         Model.generateLinearModel(1d, 10d);
 
-        List<Double> unitList = Model.getListOfUnits();;
+        List<Double> numericalValueList = Model.getListOfNumericalValues();;
         LocalDate startDate = LocalDate.of(1963, 05, 22);
         Plan plan = new Plan();
-        plan.assignDates(unitList, startDate);
+        plan.assignDates(numericalValueList, startDate);
         List<Plan> dateList = plan.getPairs();
         Plan expPair = new Plan(startDate.plusDays(3L), 13);
         Plan actual = dateList.get(3);
@@ -51,9 +51,9 @@ public class PlanTest {
         assertThat(actual.getDate(), is(equalTo(expPair.getDate())));
         assertThat(actual.getDate(), is(equalTo(LocalDate.of(1963, 05, 22 + 3))));
 
-//        Test units
-        assertThat(actual.getUnit(), is(equalTo(expPair.getUnit())));
-        assertThat(actual.getUnit(), is(equalTo(13d)));
+//        Test numerical values
+        assertThat(actual.getNumericalValue(), is(equalTo(expPair.getNumericalValue())));
+        assertThat(actual.getNumericalValue(), is(equalTo(13d)));
     }
 
     /**
@@ -84,27 +84,27 @@ public class PlanTest {
     }
 
     /**
-     * Test of getUnit method, of class Plan.
+     * Test of getNumericalValue method, of class Plan.
      */
     @Test
-    public void testGetUnit() {
-        System.out.println("Testing getUnit");
+    public void testGetNumericalValue() {
+        System.out.println("Testing getNumericalValue");
         Plan instance = new Plan();
         double expResult = 0.0;
-        double result = instance.getUnit();
+        double result = instance.getNumericalValue();
         assertThat(result, is(expResult));
     }
 
     /**
-     * Test of setUnit method, of class Plan.
+     * Test of setNumericalValue method, of class Plan.
      */
     @Test
-    public void testSetUnit() {
-        System.out.println("Testing setUnit");
-        double unit = 0.0;
+    public void testSetNumericalValue() {
+        System.out.println("Testing setNumericalValue");
+        double numericalValue = 0.0;
         Plan instance = new Plan();
-        instance.setUnit(unit);
-        assertThat(instance.getUnit(), is(unit));
+        instance.setNumericalValue(numericalValue);
+        assertThat(instance.getNumericalValue(), is(numericalValue));
 
     }
 
@@ -137,10 +137,10 @@ public class PlanTest {
         instance.setPairs(Pairs);
 
         assertThat(LocalDate.of(1963, 05, 22), is(instance.getPairs().get(0).getDate()));
-        assertThat(10d, is(equalTo(instance.getPairs().get(0).getUnit())));
+        assertThat(10d, is(equalTo(instance.getPairs().get(0).getNumericalValue())));
 
         assertThat(LocalDate.of(1963, 05, 23), is(instance.getPairs().get(1).getDate()));
-        assertThat(11d, is(equalTo(instance.getPairs().get(1).getUnit())));
+        assertThat(11d, is(equalTo(instance.getPairs().get(1).getNumericalValue())));
     }
 
 }

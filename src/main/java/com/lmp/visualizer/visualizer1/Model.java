@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Model {
 
-    private static List<Double> listOfUnits = new LinkedList<>();
+    private static List<Double> listOfNumericalValues = new LinkedList<>();
 
     /**
      * Generates a model based on a Linear growth function P = m * t + b.
@@ -29,17 +29,17 @@ public class Model {
     public static void generateLinearModel(double m, double b) {
 
         for (int t = 0; t < 2192; t++) {
-            listOfUnits.add(m * t + b);
+            listOfNumericalValues.add(m * t + b);
         }
 
     }
 
-    public static List<Double> getListOfUnits() {
-        return listOfUnits;
+    public static List<Double> getListOfNumericalValues() {
+        return listOfNumericalValues;
     }
 
-    public static void setListOfUnits(List<Double> listOfUnits) {
-        Model.listOfUnits = listOfUnits;
+    public static void setListOfNumericalValues(List<Double> listOfNumericalValues) {
+        Model.listOfNumericalValues = listOfNumericalValues;
     }
 
 }

@@ -6,14 +6,13 @@
 package com.lmp.visualizer.visualizer1;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toCollection;
 
 /**
- * Converts the unit lists into a calendar based plan
+ * Converts the numericalValue lists into a calendar based plan
  *
  * @author SEPALMM
  */
@@ -22,36 +21,36 @@ public class Plan {
     private List<Plan> Pairs = new LinkedList<>();
     private static long dayCounter;
     private LocalDate date;
-    private double unit;
+    private double numericalValue;
 
     public Plan() {
     }
 
-    public Plan(LocalDate date, double unit) {
+    public Plan(LocalDate date, double numericalValue) {
         this.date = date;
-        this.unit = unit;
+        this.numericalValue = numericalValue;
     }
 
     /**
-     * Makes pairs of item units and dates
+     * Makes pairs of numerical values and dates
      *
-     * @param unitList List of unit items from the base model
+     * @param numericalValueList List of numerical values from the base model
      * @param startDate The t_0 starting date
      */
-    public void assignDates(List<Double> unitList, LocalDate startDate) {
-        Pairs.addAll(collectPairs(unitList, startDate));
+    public void assignDates(List<Double> numericalValueList, LocalDate startDate) {
+        Pairs.addAll(collectPairs(numericalValueList, startDate));
     }
 
-    private static List<Plan> collectPairs(List<Double> unitList, LocalDate startDate) {
-        return unitList.stream().map(makePair(startDate)).collect(toCollection(ArrayList::new));
+    private static List<Plan> collectPairs(List<Double> numericalValueList, LocalDate startDate) {
+        return numericalValueList.stream().map(makePair(startDate)).collect(toCollection(LinkedList::new));
     }
 
     private static Function<Double, Plan> makePair(LocalDate startDate) {
         dayCounter = 0;
-        return u -> {
+        return v -> {
             Plan p = new Plan();
             p.setDate(startDate.plusDays(dayCounter));
-            p.setUnit(u);
+            p.setNumericalValue(v);
             dayCounter++;
             return p;
         };
@@ -73,12 +72,12 @@ public class Plan {
         this.date = date;
     }
 
-    public double getUnit() {
-        return unit;
+    public double getNumericalValue() {
+        return numericalValue;
     }
 
-    public void setUnit(double unit) {
-        this.unit = unit;
+    public void setNumericalValue(double numericalValue) {
+        this.numericalValue = numericalValue;
     }
 
 }

@@ -20,7 +20,7 @@ public class VisualizerMain {
     public static void main(String[] args) {
         // Generate a unit list
         Model.generateLinearModel(1d, 10d);
-        List<Double> unitList = Model.getListOfUnits();
+        List<Double> unitList = Model.getListOfNumericalValues();
 
 //        Generate plans
         Plan productionPlan = new Plan();
@@ -28,6 +28,11 @@ public class VisualizerMain {
 
         Plan salesPlan = new Plan();
         salesPlan.assignDates(unitList, LocalDate.of(2016, 03, 27));
+
+//        Convert plans to money base
+        UnitConverter ucProductionPlan = new UnitConverter();
+        ucProductionPlan.makePlanMoneyBased(productionPlan.getPairs(), -100d);
+        List<Plan> productionCostPlan = ucProductionPlan.getPairs();
     }
 
 }

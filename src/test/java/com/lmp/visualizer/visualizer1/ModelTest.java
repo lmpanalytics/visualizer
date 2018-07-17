@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class ModelTest {
 
-    Double[] unitArray;
+    Double[] numericalValueArray;
 
     public ModelTest() {
     }
@@ -43,23 +43,23 @@ public class ModelTest {
         double b = 10.0;
         Model.generateLinearModel(m, b);
 
-        unitArray = new Double[days];
+        numericalValueArray = new Double[days];
         for (int t = 0; t < days; t++) {
             if (t == 0) {
-                unitArray[t] = b;
+                numericalValueArray[t] = b;
             } else {
-                unitArray[t] = unitArray[t - 1] + m;
+                numericalValueArray[t] = numericalValueArray[t - 1] + m;
             }
 
         }
 
-        List<Double> expUnitList = Arrays.asList(unitArray);
-        List<Double> resultList = Model.getListOfUnits();
+        List<Double> expNumericalValueList = Arrays.asList(numericalValueArray);
+        List<Double> resultList = Model.getListOfNumericalValues();
 
-//        Test of unit list contents
-        assertThat(resultList, is(expUnitList));
+//        Test of numerical value list contents
+        assertThat(resultList, is(expNumericalValueList));
 
-//        Test of unit sum after first 365 days
+//        Test of numerical value sum after first 365 days
         double result = resultList.get(364);
         double expSum = 1 * (365 - 1) + 10;
         assertThat(result, is(expSum));
