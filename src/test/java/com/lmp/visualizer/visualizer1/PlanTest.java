@@ -143,4 +143,16 @@ public class PlanTest {
         assertThat(11d, is(equalTo(instance.getPairs().get(1).getNumericalValue())));
     }
 
+    /**
+     * Test of getYear method, of class Plan.
+     */
+    @Test
+    public void testGetYear() {
+        System.out.println("Testing getYear");
+        Plan instance = new Plan();
+        instance.setDate(LocalDate.of(2018, 07, 18));
+        int expResult = 2018;
+        int actual = instance.getYear();
+        assertThat(actual, is(expResult));
+    }
 }

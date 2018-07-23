@@ -21,6 +21,7 @@ public class Plan {
     private List<Plan> Pairs = new LinkedList<>();
     private static long dayCounter;
     private LocalDate date;
+    private int year;
     private double numericalValue;
 
     public Plan() {
@@ -78,6 +79,14 @@ public class Plan {
 
     public void setNumericalValue(double numericalValue) {
         this.numericalValue = numericalValue;
+    }
+
+    public int getYear() {
+        return year = getDate().getYear();
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
 }
