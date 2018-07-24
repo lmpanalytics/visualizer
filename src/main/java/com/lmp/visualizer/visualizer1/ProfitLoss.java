@@ -45,17 +45,19 @@ public class ProfitLoss {
      *
      * @param salesRevenuePlan The planned sales
      * @param productionCostPlan The planned direct labor and raw material costs
+     * @param factoryOverheadCostPlan The planned factory overhead costs
      */
-    public void makeProfitLossStatement(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan) {
-        PL_Map.putAll(ProfitLoss.processPlans(salesRevenuePlan, productionCostPlan));
+    public void makeProfitLossStatement(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan, List<Plan> factoryOverheadCostPlan) {
+        PL_Map.putAll(ProfitLoss.processPlans(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan));
     }
 
-    private static Map<LocalDate, ProfitLoss> processPlans(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan) {
+    private static Map<LocalDate, ProfitLoss> processPlans(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan, List<Plan> factoryOverheadCostPlan) {
         Map<LocalDate, ProfitLoss> masterMap = new HashMap<>();
 
         populateMasterMap(masterMap,
                 convertToEndOfYearDateMap(collectDataToAnnualMap(productionCostPlan)),
-                convertToEndOfYearDateMap(collectDataToAnnualMap(salesRevenuePlan))
+                convertToEndOfYearDateMap(collectDataToAnnualMap(salesRevenuePlan)),
+                convertToEndOfYearDateMap(collectDataToAnnualMap(factoryOverheadCostPlan))
         );
 
         return masterMap;
@@ -64,7 +66,8 @@ public class ProfitLoss {
     private static void populateMasterMap(
             Map<LocalDate, ProfitLoss> masterMap,
             Map<LocalDate, Double> productionMap,
-            Map<LocalDate, Double> revenueMap
+            Map<LocalDate, Double> revenueMap,
+            Map<LocalDate, Double> factoryMap
     ) {
         productionMap.forEach((productionDate, directMaterialAndLabourCost) -> masterMap.put(productionDate,
                 new ProfitLoss(0d, directMaterialAndLabourCost, 0d, 0d, calculateGrossProfit(0d, directMaterialAndLabourCost, 0d, 0d))
@@ -88,6 +91,28 @@ public class ProfitLoss {
                         calculateGrossProfit(revenue,
                                 e.getValue().getDirectMaterialAndLabourCost(),
                                 e.getValue().getFactoryOverheadExpense(),
+                                e.getValue().getDepreciation())
+                )));
+
+        //        Add the Factory Overhead Map data to the Master Map
+        factoryMap.forEach((factoryOverheadDate, overheadExpense) -> masterMap.putIfAbsent(factoryOverheadDate,
+                new ProfitLoss(0d, 0d, overheadExpense, 0d, calculateGrossProfit(0d, 0d, overheadExpense, 0d))
+        ));
+
+//        If master map already contains key, then:
+//        (a) set Overhead
+        factoryMap.forEach((factoryOverheadDate, overheadExpense)
+                -> masterMap.entrySet().stream().filter(e -> e.getKey().equals(factoryOverheadDate)).
+                        forEach(e -> e.getValue().setFactoryOverheadExpense(overheadExpense)));
+
+//        (b) recalculate and set the Gross Profit
+        factoryMap.forEach((factoryOverheadDate, overheadExpense)
+                -> masterMap.entrySet().stream().filter(e -> e.getKey().equals(factoryOverheadDate)).
+                        forEach(e -> e.getValue().setGrossProfit(
+                        calculateGrossProfit(
+                                e.getValue().getRevenue(),
+                                e.getValue().getDirectMaterialAndLabourCost(),
+                                overheadExpense,
                                 e.getValue().getDepreciation())
                 )));
 
