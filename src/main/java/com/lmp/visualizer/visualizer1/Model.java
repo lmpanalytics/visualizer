@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Model {
 
-    private static List<Double> listOfNumericalValues = new LinkedList<>();
+    private List<Double> listOfNumericalValues = new LinkedList<>();
 
     /**
      * Generates a model based on a Linear growth function P = m * t + b.
@@ -26,7 +26,7 @@ public class Model {
      * @param m Absolute constant number of added population at t1, t2, ..., t_n
      * @param b Population at day t0
      */
-    public static void generateLinearModel(double m, double b) {
+    public void generateLinearModel(double m, double b) {
 
         for (int t = 0; t < 2192; t++) {
             listOfNumericalValues.add(m * t + b);
@@ -34,12 +34,12 @@ public class Model {
 
     }
 
-    public static List<Double> getListOfNumericalValues() {
+    public List<Double> getListOfNumericalValues() {
         return listOfNumericalValues;
     }
 
-    public static void setListOfNumericalValues(List<Double> listOfNumericalValues) {
-        Model.listOfNumericalValues = listOfNumericalValues;
+    public void setListOfNumericalValues(List<Double> listOfNumericalValues) {
+        this.listOfNumericalValues = listOfNumericalValues;
     }
 
 }

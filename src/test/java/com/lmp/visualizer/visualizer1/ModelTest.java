@@ -38,10 +38,11 @@ public class ModelTest {
     @Test
     public void testGenerateLinearModel() {
         System.out.println("Testing generateLinearModel");
+        Model model = new Model();
         int days = 2192;
         double m = 1.0;
         double b = 10.0;
-        Model.generateLinearModel(m, b);
+        model.generateLinearModel(m, b);
 
         numericalValueArray = new Double[days];
         for (int t = 0; t < days; t++) {
@@ -54,7 +55,7 @@ public class ModelTest {
         }
 
         List<Double> expNumericalValueList = Arrays.asList(numericalValueArray);
-        List<Double> resultList = Model.getListOfNumericalValues();
+        List<Double> resultList = model.getListOfNumericalValues();
 
 //        Test of numerical value list contents
         assertThat(resultList, is(expNumericalValueList));

@@ -38,9 +38,10 @@ public class PlanTest {
     @Test
     public void testAssignDates() {
         System.out.println("Testing assignDates");
-        Model.generateLinearModel(1d, 10d);
+        Model model = new Model();
+        model.generateLinearModel(1d, 10d);
 
-        List<Double> numericalValueList = Model.getListOfNumericalValues();;
+        List<Double> numericalValueList = model.getListOfNumericalValues();;
         LocalDate startDate = LocalDate.of(1963, 05, 22);
         Plan plan = new Plan();
         plan.assignDates(numericalValueList, startDate);
