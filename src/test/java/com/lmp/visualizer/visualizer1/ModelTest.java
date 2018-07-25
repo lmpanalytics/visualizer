@@ -33,16 +33,16 @@ public class ModelTest {
     }
 
     /**
-     * Test of generateLinearModel method, of class Model.
+     * Test of generateLinearGrowthModel method, of class Model.
      */
     @Test
-    public void testGenerateLinearModel() {
-        System.out.println("Testing generateLinearModel");
+    public void testGenerateLinearGrowthModel() {
+        System.out.println("Testing generateLinearGrowthModel");
         Model model = new Model();
         int days = 2192;
         double m = 1.0;
         double b = 10.0;
-        model.generateLinearModel(m, b);
+        model.generateLinearGrowthModel(m, b);
 
         numericalValueArray = new Double[days];
         for (int t = 0; t < days; t++) {
@@ -65,6 +65,27 @@ public class ModelTest {
         double expSum = 1 * (365 - 1) + 10;
         assertThat(result, is(expSum));
 
+    }
+
+    /**
+     * Test of generateStraightLineDepreciationModel method, of class Model.
+     */
+    @Test
+    public void testGenerateStraightLineDepreciationModel() {
+        System.out.println("generateStraightLineDepreciationModel");
+        Model threeYears = new Model();
+        threeYears.generateStraightLineDepreciationModel(3);
+
+        assertThat(threeYears.getListOfNumericalValues().stream()
+                .reduce(0.0, Double::sum), is(3d * 365d));
+        assertThat(threeYears.getListOfNumericalValues().size(), is(2192));
+
+        Model twentyYears = new Model();
+        twentyYears.generateStraightLineDepreciationModel(20);
+
+        assertThat(twentyYears.getListOfNumericalValues().stream()
+                .reduce(0.0, Double::sum), is(2192d));
+        assertThat(twentyYears.getListOfNumericalValues().size(), is(2192));
     }
 
 }

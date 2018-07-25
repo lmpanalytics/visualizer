@@ -56,13 +56,19 @@ public class ProfitLossTest {
         factoryOverheadCostPlan.add(new Plan(LocalDate.of(2018, 03, 01), -10d));
         factoryOverheadCostPlan.add(new Plan(LocalDate.of(2020, 10, 01), -10d));
 
+        List<Plan> depreciationChargePlan = new LinkedList<>();
+        depreciationChargePlan.add(new Plan(LocalDate.of(2018, 01, 31), -1d));
+        depreciationChargePlan.add(new Plan(LocalDate.of(2018, 02, 28), -1d));
+        depreciationChargePlan.add(new Plan(LocalDate.of(2018, 03, 31), -1d));
+
         ProfitLoss instance = new ProfitLoss();
-        instance.makeProfitLossStatement(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan);
+        instance.makeProfitLossStatement(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan, depreciationChargePlan);
 
         assertThat(instance.getPL_Map().get(LocalDate.of(2018, 12, 31)).getRevenue(), is(295d));
         assertThat(instance.getPL_Map().get(LocalDate.of(2018, 12, 31)).getDirectMaterialAndLabourCost(), is(-210d));
         assertThat(instance.getPL_Map().get(LocalDate.of(2018, 12, 31)).getFactoryOverheadExpense(), is(-30d));
-        assertThat(instance.getPL_Map().get(LocalDate.of(2018, 12, 31)).getGrossProfit(), is(55d));
+        assertThat(instance.getPL_Map().get(LocalDate.of(2018, 12, 31)).getDepreciation(), is(-3d));
+        assertThat(instance.getPL_Map().get(LocalDate.of(2018, 12, 31)).getGrossProfit(), is(52d));
         assertThat(instance.getPL_Map().get(LocalDate.of(2020, 12, 31)).getGrossProfit(), is(10d));
     }
 

@@ -28,14 +28,21 @@ public class VisualizerMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-// Generate unit lists for production of products and factory overhead costs
+//        Set asset's service lifetime for depreciation calculations
+        double depreciationYears = 5.0;
+
+// Generate unit lists for production, factory overhead costs, and depreciation
         Model productModel = new Model();
-        productModel.generateLinearModel(1d, 10d);
+        productModel.generateLinearGrowthModel(1d, 10d);
         List<Double> productUnitList = productModel.getListOfNumericalValues();
 
         Model factoryOverheadModel = new Model();
-        factoryOverheadModel.generateLinearModel(0d, 16d);
+        factoryOverheadModel.generateLinearGrowthModel(0d, 16d);
         List<Double> factoryOverheadUnitList = factoryOverheadModel.getListOfNumericalValues();
+
+        Model depreciationModel = new Model();
+        depreciationModel.generateStraightLineDepreciationModel((int) depreciationYears);
+        List<Double> depreciationUnitList = depreciationModel.getListOfNumericalValues();
 
 //        Generate plans
         Plan productionPlan = new Plan();
@@ -46,6 +53,9 @@ public class VisualizerMain {
 
         Plan factoryOverheadPlan = new Plan();
         factoryOverheadPlan.assignDates(factoryOverheadUnitList, LocalDate.of(2016, 02, 27));
+
+        Plan depreciationPlan = new Plan();
+        depreciationPlan.assignDates(depreciationUnitList, LocalDate.of(2016, 02, 27));
 
 //        Convert plans to money base
         UnitConverter ucProductionPlan = new UnitConverter();
@@ -60,9 +70,13 @@ public class VisualizerMain {
         ucFactoryOverheadPlan.makePlanMoneyBased(factoryOverheadPlan.getPairs(), -40d);
         List<Plan> factoryOverheadCostPlan = ucFactoryOverheadPlan.getPairs();
 
+        UnitConverter ucDepreciationPlan = new UnitConverter();
+        ucDepreciationPlan.makePlanMoneyBased(depreciationPlan.getPairs(), Utility.calculateStraightLineDepreciationCharge(depreciationYears, 10_000d, 1000d));
+        List<Plan> depreciationChargePlan = ucDepreciationPlan.getPairs();
+
 //        Calculate Profit Loss
         ProfitLoss profitLoss = new ProfitLoss();
-        profitLoss.makeProfitLossStatement(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan);
+        profitLoss.makeProfitLossStatement(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan, depreciationChargePlan);
         Map<LocalDate, ProfitLoss> plMap = profitLoss.getPL_Map();
 
         printProfitLoss(plMap, 10);

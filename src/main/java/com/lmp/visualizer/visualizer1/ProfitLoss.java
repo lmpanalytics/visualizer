@@ -46,18 +46,20 @@ public class ProfitLoss {
      * @param salesRevenuePlan The planned sales
      * @param productionCostPlan The planned direct labor and raw material costs
      * @param factoryOverheadCostPlan The planned factory overhead costs
+     * @param depreciationChargePlan The planned depreciation charge
      */
-    public void makeProfitLossStatement(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan, List<Plan> factoryOverheadCostPlan) {
-        PL_Map.putAll(ProfitLoss.processPlans(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan));
+    public void makeProfitLossStatement(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan, List<Plan> factoryOverheadCostPlan, List<Plan> depreciationChargePlan) {
+        PL_Map.putAll(ProfitLoss.processPlans(salesRevenuePlan, productionCostPlan, factoryOverheadCostPlan, depreciationChargePlan));
     }
 
-    private static Map<LocalDate, ProfitLoss> processPlans(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan, List<Plan> factoryOverheadCostPlan) {
+    private static Map<LocalDate, ProfitLoss> processPlans(List<Plan> salesRevenuePlan, List<Plan> productionCostPlan, List<Plan> factoryOverheadCostPlan, List<Plan> depreciationChargePlan) {
         Map<LocalDate, ProfitLoss> masterMap = new HashMap<>();
 
         populateMasterMap(masterMap,
                 convertToEndOfYearDateMap(collectDataToAnnualMap(productionCostPlan)),
                 convertToEndOfYearDateMap(collectDataToAnnualMap(salesRevenuePlan)),
-                convertToEndOfYearDateMap(collectDataToAnnualMap(factoryOverheadCostPlan))
+                convertToEndOfYearDateMap(collectDataToAnnualMap(factoryOverheadCostPlan)),
+                convertToEndOfYearDateMap(collectDataToAnnualMap(depreciationChargePlan))
         );
 
         return masterMap;
@@ -67,7 +69,8 @@ public class ProfitLoss {
             Map<LocalDate, ProfitLoss> masterMap,
             Map<LocalDate, Double> productionMap,
             Map<LocalDate, Double> revenueMap,
-            Map<LocalDate, Double> factoryMap
+            Map<LocalDate, Double> factoryMap,
+            Map<LocalDate, Double> depreciationMap
     ) {
         productionMap.forEach((productionDate, directMaterialAndLabourCost) -> masterMap.put(productionDate,
                 new ProfitLoss(0d, directMaterialAndLabourCost, 0d, 0d, calculateGrossProfit(0d, directMaterialAndLabourCost, 0d, 0d))
@@ -94,7 +97,7 @@ public class ProfitLoss {
                                 e.getValue().getDepreciation())
                 )));
 
-        //        Add the Factory Overhead Map data to the Master Map
+//        Add the Factory Overhead Map data to the Master Map
         factoryMap.forEach((factoryOverheadDate, overheadExpense) -> masterMap.putIfAbsent(factoryOverheadDate,
                 new ProfitLoss(0d, 0d, overheadExpense, 0d, calculateGrossProfit(0d, 0d, overheadExpense, 0d))
         ));
@@ -114,6 +117,28 @@ public class ProfitLoss {
                                 e.getValue().getDirectMaterialAndLabourCost(),
                                 overheadExpense,
                                 e.getValue().getDepreciation())
+                )));
+
+//        Add the Depreciation Map data to the Master Map
+        depreciationMap.forEach((depreciationDate, depreciation) -> masterMap.putIfAbsent(depreciationDate,
+                new ProfitLoss(0d, 0d, 0d, depreciation, calculateGrossProfit(0d, 0d, 0d, depreciation))
+        ));
+
+//        If master map already contains key, then:
+//        (a) set Depreciation
+        depreciationMap.forEach((depreciationDate, depreciation)
+                -> masterMap.entrySet().stream().filter(e -> e.getKey().equals(depreciationDate)).
+                        forEach(e -> e.getValue().setDepreciation(depreciation)));
+
+//        (b) recalculate and set the Gross Profit
+        depreciationMap.forEach((depreciationDate, depreciation)
+                -> masterMap.entrySet().stream().filter(e -> e.getKey().equals(depreciationDate)).
+                        forEach(e -> e.getValue().setGrossProfit(
+                        calculateGrossProfit(
+                                e.getValue().getRevenue(),
+                                e.getValue().getDirectMaterialAndLabourCost(),
+                                e.getValue().getFactoryOverheadExpense(),
+                                depreciation)
                 )));
 
     }
