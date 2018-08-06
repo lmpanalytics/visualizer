@@ -19,7 +19,7 @@ public class Utility {
      * @param currentValue The current (book) value of the asset
      * @param residualValue The scrap value of the asset
      * @return The depreciation charge, per day. Negative as it is charged to
-     * P&L.
+     * PL.
      */
     public static Double calculateStraightLineDepreciationCharge(double years, double currentValue, double residualValue) {
         return -(currentValue - residualValue) / (365 * years);

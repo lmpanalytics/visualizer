@@ -46,28 +46,28 @@ public class VisualizerMain {
 
 //        Generate plans
         Plan productionPlan = new Plan();
-        productionPlan.assignDates(productUnitList, LocalDate.of(2016, 02, 27));
+        productionPlan.assignDates(productUnitList, LocalDate.of(2017, 01, 01));
 
         Plan salesPlan = new Plan();
-        salesPlan.assignDates(productUnitList, LocalDate.of(2016, 03, 27));
+        salesPlan.assignDates(productUnitList, LocalDate.of(2018, 01, 01));
 
         Plan factoryOverheadPlan = new Plan();
-        factoryOverheadPlan.assignDates(factoryOverheadUnitList, LocalDate.of(2016, 02, 27));
+        factoryOverheadPlan.assignDates(factoryOverheadUnitList, LocalDate.of(2017, 01, 01));
 
         Plan depreciationPlan = new Plan();
-        depreciationPlan.assignDates(depreciationUnitList, LocalDate.of(2016, 02, 27));
+        depreciationPlan.assignDates(depreciationUnitList, LocalDate.of(2017, 01, 01));
 
 //        Convert plans to money base
         UnitConverter ucProductionPlan = new UnitConverter();
-        ucProductionPlan.makePlanMoneyBased(productionPlan.getPairs(), -100d);
+        ucProductionPlan.makePlanMoneyBased(productionPlan.getPairs(), -1d);
         List<Plan> productionCostPlan = ucProductionPlan.getPairs();
 
         UnitConverter ucSalesPlan = new UnitConverter();
-        ucSalesPlan.makePlanMoneyBased(salesPlan.getPairs(), 120d);
+        ucSalesPlan.makePlanMoneyBased(salesPlan.getPairs(), 1d);
         List<Plan> salesRevenuePlan = ucSalesPlan.getPairs();
 
         UnitConverter ucFactoryOverheadPlan = new UnitConverter();
-        ucFactoryOverheadPlan.makePlanMoneyBased(factoryOverheadPlan.getPairs(), -40d);
+        ucFactoryOverheadPlan.makePlanMoneyBased(factoryOverheadPlan.getPairs(), -1d);
         List<Plan> factoryOverheadCostPlan = ucFactoryOverheadPlan.getPairs();
 
         UnitConverter ucDepreciationPlan = new UnitConverter();

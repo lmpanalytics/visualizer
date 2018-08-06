@@ -41,7 +41,7 @@ public class ProfitLoss {
     /**
      * Collects sales, cost, and other lists containing Date and Value pairs.
      * Then sums values by final day of each year, calculates and produces the
-     * P&L Statement.
+     * PL Statement.
      *
      * @param salesRevenuePlan The planned sales
      * @param productionCostPlan The planned direct labor and raw material costs
